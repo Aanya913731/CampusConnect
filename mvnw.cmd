@@ -100,15 +100,21 @@ cd "%EXEC_DIR%"
 set WRAPPER_JAR="%MAVEN_PROJECTBASEDIR%\.mvn\wrapper\maven-wrapper.jar"
 set WRAPPER_LAUNCHER=org.apache.maven.wrapper.MavenWrapperMain
 
-@REM Provide a "mvn.cmd" alternative if wrapper jar doesn't exist
+@REM If a real Maven installation is available, use it directly.
 where mvn >nul 2>&1
 if "%ERRORLEVEL%"=="0" (
     mvn %*
     goto end
 )
 
-echo Executing Maven...
-"%JAVA_HOME%\bin\java.exe" %MAVEN_OPTS% -jar %WRAPPER_JAR% %*
+if not exist %WRAPPER_JAR% (
+    echo Error: Maven Wrapper JAR is missing: %WRAPPER_JAR%
+    echo Please restore the .mvn\wrapper folder or install Maven in PATH.
+    goto error
+)
+
+echo Executing Maven with the Maven Wrapper...
+"%JAVA_HOME%\bin\java.exe" %MAVEN_OPTS% -Dmaven.multiModuleProjectDirectory="%MAVEN_PROJECTBASEDIR%" -classpath %WRAPPER_JAR% org.apache.maven.wrapper.MavenWrapperMain %*
 if ERRORLEVEL 1 goto error
 goto end
 

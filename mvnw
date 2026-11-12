@@ -20,8 +20,19 @@
 
 if command -v mvn >/dev/null 2>&1; then
     exec mvn "$@"
-else
-    echo "Maven not found in PATH. Please install Maven or run from your IDE (e.g. IntelliJ IDEA)."
+fi
+
+if [ -z "$JAVA_HOME" ]; then
+    echo "JAVA_HOME is not set. Please set it to a valid JDK installation."
     exit 1
 fi
+
+WRAPPER_JAR=".mvn/wrapper/maven-wrapper.jar"
+if [ ! -f "$WRAPPER_JAR" ]; then
+    echo "Maven Wrapper JAR not found: $WRAPPER_JAR"
+    echo "Restore the .mvn/wrapper folder or install Maven in PATH."
+    exit 1
+fi
+
+exec "$JAVA_HOME/bin/java" $MAVEN_OPTS -Dmaven.multiModuleProjectDirectory="$(pwd)" -classpath "$WRAPPER_JAR" org.apache.maven.wrapper.MavenWrapperMain "$@"
 

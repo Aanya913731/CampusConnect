@@ -2,6 +2,7 @@ package com.campusconnect.util;
 
 import com.campusconnect.entity.Certificate;
 import com.lowagie.text.*;
+import com.lowagie.text.alignment.HorizontalAlignment;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfWriter;
 import org.slf4j.Logger;
@@ -105,7 +106,7 @@ public final class PdfCertificateGenerator {
             // Cell 1: Date & Verification
             Cell leftCell = new Cell();
             leftCell.setBorder(Rectangle.NO_BORDER);
-            leftCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            leftCell.setHorizontalAlignment(HorizontalAlignment.CENTER);
             Paragraph datePara = new Paragraph("Date of Issue: " + cert.getIssueDate().format(DateTimeFormatter.ofPattern("dd MMM yyyy")), metaFont);
             Paragraph idPara = new Paragraph("Cert ID: " + cert.getCertificateNumber(), metaFont);
             leftCell.add(datePara);
@@ -115,7 +116,7 @@ public final class PdfCertificateGenerator {
             // Cell 2: QR Code for Verification
             Cell centerCell = new Cell();
             centerCell.setBorder(Rectangle.NO_BORDER);
-            centerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            centerCell.setHorizontalAlignment(HorizontalAlignment.CENTER);
             try {
                 String verifyUrl = verificationBaseUrl + "/certificates/verify/" + cert.getVerificationToken();
                 byte[] qrBytes = QrCodeGenerator.generateQrCodeImage(verifyUrl, 85, 85);
@@ -133,7 +134,7 @@ public final class PdfCertificateGenerator {
             // Cell 3: Signatures
             Cell rightCell = new Cell();
             rightCell.setBorder(Rectangle.NO_BORDER);
-            rightCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            rightCell.setHorizontalAlignment(HorizontalAlignment.CENTER);
             Paragraph sigLine = new Paragraph("_________________________", signatureTitleFont);
             sigLine.setAlignment(Element.ALIGN_CENTER);
             Paragraph signatoryPara = new Paragraph(cert.getAuthorizedSignatory(), signatureTitleFont);
